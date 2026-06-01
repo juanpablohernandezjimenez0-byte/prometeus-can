@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colección Prometeus — CAN</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--verde:#2E7D32;--verde-l:#E8F5E9;--verde-m:#66BB6A;--azul:#1565C0;--azul-l:#E3F2FD;--azul-m:#42A5F5;--rojo:#C62828;--rojo-l:#FFEBEE;--rojo-m:#EF5350;--amarillo:#F9C22E;--amarillo-l:#FFFDE7;--amarillo-m:#F9C22E;--carbon:#111;--crema:#FAFAF7}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+  body{font-family:'Barlow',sans-serif;background:var(--crema);color:var(--carbon);overflow-x:hidden}
+
+  /* NAV */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--carbon);display:flex;align-items:center;justify-content:space-between;padding:.6rem 2rem;border-bottom:1px solid #222}
+  .topbar-brand{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;background:linear-gradient(90deg,#66BB6A,#42A5F5,#EF5350,#FFA726);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .topbar-nav{display:flex;gap:.3rem;flex-wrap:wrap}
+  .tnav{padding:.28rem .75rem;border-radius:20px;font-size:.72rem;font-weight:800;cursor:pointer;text-decoration:none;transition:all .2s;border:none}
+  .tnav:hover{opacity:.8;transform:translateY(-1px)}
+  .nbo{background:var(--verde);color:#fff}.nec{background:var(--azul);color:#fff}
+  .npe{background:var(--rojo);color:#fff}.nco{background:var(--amarillo);color:#fff}
+  .nla{background:linear-gradient(90deg,#66BB6A,#42A5F5,#EF5350,#FFA726);color:#fff}
+
+  /* HERO */
+  .hero{min-height:100vh;padding-top:52px;background:var(--carbon);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+  .hero-stripe{position:absolute;top:0;bottom:0;width:5px;left:50%;transform:translateX(-50%);background:linear-gradient(180deg,var(--verde) 25%,var(--azul) 25%,var(--azul) 50%,var(--rojo) 50%,var(--rojo) 75%,var(--amarillo-m) 75%);opacity:.4}
+  .hero-ey{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:#666;margin-bottom:1rem;opacity:0;animation:fu .6s .2s forwards}
+  .hero-h{font-family:'Playfair Display',serif;font-size:clamp(3rem,7vw,6rem);font-weight:900;line-height:1;color:#fff;margin-bottom:.4rem;opacity:0;animation:fu .6s .35s forwards}
+  .hero-h .gr{color:#C8C2B4;-webkit-text-fill-color:#C8C2B4}
+  .hero-s{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;color:#666;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2.5rem;opacity:0;animation:fu .6s .5s forwards}
+  .hero-dots{display:flex;gap:1rem;opacity:0;animation:fu .6s .7s forwards}
+  .dot{width:14px;height:14px;border-radius:50%}
+
+  /* COUNTRY */
+  .cs-header{padding:5rem 2rem 3rem;position:relative;overflow:hidden}
+  .cs-inner{max-width:1100px;margin:0 auto}
+  .cs-ey{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.5rem}
+  .cs-h{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4.2rem);font-weight:900;line-height:1;color:#fff;margin-bottom:.4rem}
+  .cs-sub{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem}
+  .cs-ficha{display:inline-flex;gap:1.5rem;flex-wrap:wrap;background:rgba(0,0,0,.2);border-radius:10px;padding:.9rem 1.4rem}
+  .fi .fv{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;color:#fff}
+  .fi .fl{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.1rem}
+  .cs-deco{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-size:16rem;opacity:.05;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:#fff}
+
+  /* TABS */
+  .cs-tabs{background:#fff;border-bottom:1px solid #eee;display:flex;overflow-x:auto;position:sticky;top:52px;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+  .cs-tab{padding:.85rem 1.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border:none;background:transparent;color:#aaa;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+
+  /* BODY */
+  .cs-body{max-width:1100px;margin:0 auto;padding:3rem 2rem}
+  .cs-panel{display:none}.cs-panel.active{display:block}
+
+  /* TURISMO */
+  .t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+  .tc{border-radius:14px;overflow:hidden;border:2px solid #eee;transition:transform .2s,box-shadow .2s}
+  .tc:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.1)}
+  .tc-top{padding:2rem 1.5rem 1rem}
+  .tc-em{font-size:2.3rem;margin-bottom:.5rem;display:block}
+  .tc-nm{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.05em}
+  .tc-body{padding:1.1rem 1.4rem;background:#fff}
+  .tc-desc{font-size:.86rem;line-height:1.7;color:#555}
+  .tc-fact{margin-top:.7rem;padding:.45rem .75rem;border-radius:5px;font-size:.76rem;font-weight:700}
+
+  /* GASTRO */
+  .g-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
+  .pc{background:#fff;border-radius:14px;padding:1.4rem;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:transform .2s}
+  .pc:hover{transform:translateX(4px)}
+  .pc-h{display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem}
+  .pc-em{font-size:1.9rem}
+  .pc-nm{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+  .pc-or{font-size:.73rem;color:#999}
+  .pc-desc{font-size:.84rem;line-height:1.7;color:#555}
+  .pc-ing{margin-top:.9rem;padding:.75rem 1rem;border-radius:8px}
+  .pc-ing h4{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem}
+  .pc-ing p{font-size:.78rem;color:#555;line-height:1.6}
+
+  /* COMERCIO */
+  .cm-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem}
+  .cm-card{background:#fff;border-radius:14px;padding:1.4rem;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .cm-card h3{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+  .bar-chart{display:flex;flex-direction:column;gap:.55rem}
+  .bar-row{display:flex;align-items:center;gap:.7rem}
+  .bar-lbl{font-size:.76rem;font-weight:600;color:#555;width:130px;flex-shrink:0}
+  .bar-trk{flex:1;height:9px;background:#eee;border-radius:5px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:5px}
+  .bar-pct{font-size:.74rem;font-weight:800;width:80px;text-align:right}
+  .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-top:.9rem}
+  .kpi{border-radius:10px;padding:.9rem;text-align:center}
+  .kpi .kv{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;color:#fff}
+  .kpi .kl{font-size:.7rem;color:rgba(255,255,255,.65);margin-top:.15rem}
+  .star-list{display:flex;flex-direction:column;gap:.75rem}
+  .star-item{display:flex;gap:.9rem;align-items:center;border-radius:10px;padding:.75rem 1rem}
+  .si-ic{font-size:1.4rem;flex-shrink:0}
+  .si-info{flex:1}
+  .si-nm{font-weight:700;font-size:.86rem}
+  .si-dt{font-size:.73rem;color:#777;margin-top:.1rem;line-height:1.4}
+  .si-val{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:900}
+
+  /* DOWNLOAD */
+  .dl-bar{border-radius:14px;padding:1.8rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:2.5rem}
+  .dl-info h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:#fff}
+  .dl-info p{font-size:.82rem;color:rgba(255,255,255,.65);margin-top:.25rem}
+  .dl-btn{display:inline-flex;align-items:center;gap:.5rem;background:#fff;padding:.75rem 1.5rem;border-radius:30px;font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;transition:all .2s;white-space:nowrap}
+  .dl-btn:hover{transform:scale(1.04);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+  /* DIVIDER */
+  .sdiv{height:6px}
+
+  /* LATINA */
+  .latina{background:var(--carbon);padding:5rem 0}
+  .lat-in{max-width:1100px;margin:0 auto;padding:0 2rem}
+  .lat-h{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.3rem);font-weight:900;text-align:center;margin-bottom:.4rem;background:linear-gradient(90deg,#66BB6A,#42A5F5,#EF5350,#FFA726);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .lat-sub{text-align:center;color:#666;font-size:.95rem;margin-bottom:2.5rem;line-height:1.7;max-width:560px;margin-left:auto;margin-right:auto}
+  .lat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+  .lc{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.08);transition:transform .2s}
+  .lc:hover{transform:translateY(-3px)}
+  .lc-top{padding:1.4rem;text-align:center}
+  .lc-fl{font-size:1.9rem;margin-bottom:.4rem}
+  .lc-p{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:#fff}
+  .lc-tag{display:inline-block;margin-top:.35rem;padding:.18rem .55rem;border-radius:10px;font-size:.68rem;font-weight:700;color:#fff;background:rgba(255,255,255,.18)}
+  .lc-body{padding:.9rem 1.1rem;background:rgba(255,255,255,.04)}
+  .lc-body p{font-size:.8rem;color:#888;line-height:1.6}
+  .lc-cm{text-align:center;padding:.7rem;font-size:.72rem;color:#555;font-style:italic}
+  .lat-quote{margin-top:2.5rem;text-align:center;padding:1.8rem 2rem;background:rgba(255,255,255,.03);border-radius:14px;border:1px solid rgba(255,255,255,.07)}
+  .lat-quote p{font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;font-style:italic;line-height:1.75;max-width:660px;margin:0 auto}
+
+  /* FOOTER */
+  footer{background:var(--carbon);border-top:1px solid #1a1a1a;padding:1.8rem;text-align:center;color:#444;font-size:.76rem}
+  .ft-stripe{height:4px;background:linear-gradient(90deg,var(--verde),var(--azul),var(--rojo),var(--amarillo-m));margin-bottom:1.3rem}
+
+  @keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media(max-width:768px){
+    .t-grid,.g-grid,.lat-grid{grid-template-columns:1fr}
+    .cm-layout{grid-template-columns:1fr}
+    .cs-ficha{gap:.8rem}
+    .topbar-nav{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">⚡ Prometeus · CAN</div>
+  <nav class="topbar-nav">
+    <a class="tnav nbo" href="#bolivia">🇧🇴 Bolivia</a>
+    <a class="tnav nec" href="#ecuador">🇪🇨 Ecuador</a>
+    <a class="tnav npe" href="#peru">🇵🇪 Perú</a>
+    <a class="tnav nco" href="#colombia">🇨🇴 Colombia</a>
+    <a class="tnav nla" href="#latina">🌎 CAN</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-stripe"></div>
+  <p class="hero-ey">Politécnico Internacional · Colección</p>
+  <h1 class="hero-h">Proyecto <span class="gr">Prometeus</span></h1>
+  <p class="hero-s">Comunidad Andina · 5 Fascículos · 4 Naciones</p>
+  <div class="hero-dots">
+    <div class="dot" style="background:var(--verde-m)"></div>
+    <div class="dot" style="background:var(--azul-m)"></div>
+    <div class="dot" style="background:var(--rojo-m)"></div>
+    <div class="dot" style="background:var(--amarillo-m)"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ BOLIVIA ═══════════════ -->
+<div id="bolivia">
+<div class="cs-header" style="background:var(--verde)">
+  <div class="cs-deco">BOL</div>
+  <div class="cs-inner">
+    <p class="cs-ey">Fascículo #1 · Identidad Verde</p>
+    <h2 class="cs-h">🇧🇴 Estado Plurinacional de Bolivia</h2>
+    <p class="cs-sub" style="color:rgba(255,255,255,.6)">Altiplano · Amazonía · Sal · Minerales · 36 Naciones Indígenas</p>
+    <div class="cs-ficha">
+      <div class="fi"><div class="fv">12.7M</div><div class="fl">Habitantes (2025)</div></div>
+      <div class="fi"><div class="fv">$57.09B</div><div class="fl">PIB (USD)</div></div>
+      <div class="fi"><div class="fv">$4.590</div><div class="fl">PIB per cápita</div></div>
+      <div class="fi"><div class="fv">20.40%</div><div class="fl">Inflación</div></div>
+      <div class="fi"><div class="fv">CCC</div><div class="fl">Riesgo de pago</div></div>
+      <div class="fi"><div class="fv">República</div><div class="fl">Sistema · Presidencialista</div></div>
+    </div>
+  </div>
+</div>
+<div class="cs-tabs" id="bo-tabs">
+  <button class="cs-tab active" style="color:var(--verde);border-bottom-color:var(--verde)" onclick="tab('bo','t',this,event)">🗺️ Turismo</button>
+  <button class="cs-tab" onclick="tab('bo','g',this,event)">🍽️ Gastronomía</button>
+  <button class="cs-tab" onclick="tab('bo','c',this,event)">📦 Comercio Exterior</button>
+</div>
+<div class="cs-body">
+
+  <div id="bo-t" class="cs-panel active">
+    <div class="t-grid reveal">
+      <div class="tc">
+        <div class="tc-top" style="background:var(--verde)"><span class="tc-em">🏜️</span><div class="tc-nm">Salar de Uyuni</div></div>
+        <div class="tc-body">
+          <p class="tc-desc">El espejo del cielo. Con <strong>10.582 km²</strong> es el salar más grande del planeta — tan vasto que se ve desde el espacio. Bajo la sal blanca yacen 10.000 millones de toneladas de sal y el <strong>70% de las reservas mundiales de litio</strong>. Un lugar donde el reflejo del cielo se pierde en el ocaso del horizonte.</p>
+          <div class="tc-fact" style="background:var(--verde-l);color:var(--verde)">📍 Potosí · 3.656 m s.n.m. · Acceso desde La Paz o San Pedro de Atacama</div>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="tc-top" style="background:var(--verde)"><span class="tc-em">🌊</span><div class="tc-nm">Lago Titicaca</div></div>
+        <div class="tc-body">
+          <p class="tc-desc">El lago navegable más alto del mundo, compartido entre Bolivia y Perú. Su nombre en aimara puede significar <em>"puma gris"</em> o provenir de la roca sagrada Thaksi Cala en la Isla del Sol. Islas flotantes de totora, comunidades Aymara vivas y atardeceres que no se olvidan.</p>
+          <div class="tc-fact" style="background:var(--verde-l);color:var(--verde)">📍 La Paz · Compartido Bolivia–Perú · Isla del Sol · Isla de la Luna</div>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="tc-top" style="background:var(--verde)"><span class="tc-em">🔮</span><div class="tc-nm">Mercado de las Brujas</div></div>
+        <div class="tc-body">
+          <p class="tc-desc">Declarado <strong>Patrimonio Cultural Inmaterial de La Paz en 2019</strong>. La calle Linares alberga chifleras (vendedoras de hierbas) y yatiris (curanderos aymaras) que ofrecen amuletos, fetos de llama para la Pachamama, hierbas medicinales y pócimas ancestrales. La cosmovisión andina viva.</p>
+          <div class="tc-fact" style="background:var(--verde-l);color:var(--verde)">📍 Calle Linares, La Paz · Lun–Dom 9:30–22:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="bo-g" class="cs-panel">
+    <div class="g-grid reveal">
+      <div class="pc" style="border-left:5px solid var(--verde)">
+        <div class="pc-h"><div class="pc-em">🥣</div><div><div class="pc-nm" style="color:var(--verde)">Sopa de Maní</div><div class="pc-or">Altiplano Boliviano · Plato dominical</div></div></div>
+        <p class="pc-desc">Nacida en el Altiplano por culturas nativas, originalmente solo con maní para alimentar a muchos con poco. Con los conquistadores llegaron la carne de res, el arroz y especias extranjeras. Hoy es el plato dominical por excelencia: sopa cremosa de maní con fideos fritos, papas doradas y caldo de res.</p>
+        <div class="pc-ing" style="background:var(--verde-l)"><h4 style="color:var(--verde)">Ingredientes principales</h4><p>500g carne ternera · 200g maní boliviano · 300g espagueti (frito) · 7 papas medianas · zanahoria · apio · ajo · comino · orégano · guisantes</p></div>
+      </div>
+      <div class="pc" style="border-left:5px solid var(--verde)">
+        <div class="pc-h"><div class="pc-em">🍗</div><div><div class="pc-nm" style="color:var(--verde)">Sajta de Pollo</div><div class="pc-or">La Paz · Plato festivo familiar</div></div></div>
+        <p class="pc-desc">Plato festivo paceño presente en cada ocasión especial. La crema de ají amarillo envuelve el pollo dorado sobre tunta (papa deshidratada andina) y guisantes. Un comentario extenso del mestizaje: sabores nativos y técnicas heredadas de la colonia en perfecta armonía.</p>
+        <div class="pc-ing" style="background:var(--verde-l)"><h4 style="color:var(--verde)">Ingredientes principales</h4><p>1 pollo entero · ají amarillo (150g) · 8 papas cerosas · 250g tunta · guisantes · 75g cacahuetes · locoto · quirquiña · tomate · cebolla</p></div>
+      </div>
+      <div class="pc" style="border-left:5px solid var(--verde)">
+        <div class="pc-h"><div class="pc-em">🍖</div><div><div class="pc-nm" style="color:var(--verde)">Pique Macho Cochabambino</div><div class="pc-or">Cochabamba · Creación de Evangelina Rojas (Rest. El Prado)</div></div></div>
+        <p class="pc-desc">Creado por Evangelina Rojas de Quiñones y su esposo Honorato en el restaurante "El Prado". Una montaña de carne marinada en cerveza con salchichas, chorizo, papas fritas, huevo duro, tomate crudo y locoto. Una porción que difícilmente logra una sola persona.</p>
+        <div class="pc-ing" style="background:var(--verde-l)"><h4 style="color:var(--verde)">Ingredientes principales</h4><p>1kg ternera · 6 salchichas · 2 chorizos · 4 huevos · 1kg patatas · cerveza · cebolla · 3 tomates · locotos · salsa soja · comino · ajo</p></div>
+      </div>
+      <div class="pc" style="border-left:5px solid var(--verde)">
+        <div class="pc-h"><div class="pc-em">🍹</div><div><div class="pc-nm" style="color:var(--verde)">Singani Sour con Maracuyá</div><div class="pc-or">Valles de Potosí · Cóctel de época colonial</div></div></div>
+        <p class="pc-desc">La variante boliviana del Pisco Sour. El Singani, destilado de uva moscatel de los valles de Potosí, se mezcla con lima, pulpa de maracuyá y clara de huevo batida. Sofisticado con pocos ingredientes, acompaña la felicidad de un pueblo persistente.</p>
+        <div class="pc-ing" style="background:var(--verde-l)"><h4 style="color:var(--verde)">Ingredientes (2 vasos)</h4><p>8cl Singani · 4cl jarabe de lima · pulpa ½ maracuyá · ½ clara de huevo · 300ml hielo triturado · amargo de Angostura o canela en polvo</p></div>
+      </div>
+      <div class="pc" style="border-left:5px solid var(--verde);grid-column:span 2">
+        <div class="pc-h"><div class="pc-em">🍞</div><div><div class="pc-nm" style="color:var(--verde)">Tantawawas</div><div class="pc-or">Festividad Todos los Santos · 1 y 2 de noviembre</div></div></div>
+        <p class="pc-desc">Panes con forma humana elaborados para el Día de Todos los Santos. Las almas regresan al mediodía del 1 de noviembre, y el pan es su ofrenda tras el viaje desde el "más allá". Llevan caretas de estuco o plástico que representan el rostro del difunto. Su forma de bebé simboliza la renovación de la vida y el ciclo agrícola. Una cultura de la muerte que se navega con respeto.</p>
+        <div class="pc-ing" style="background:var(--verde-l)"><h4 style="color:var(--verde)">Ingredientes principales</h4><p>2 tazas harina trigo · ½ taza panela/azúcar moreno · ¼ taza mantequilla · levadura · canela · clavos · anís · vainilla · 150ml agua · 2 huevos + 1 yema · Caritas (máscaras de cerámica)</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="bo-c" class="cs-panel">
+    <div class="cm-layout reveal">
+      <div>
+        <div class="cm-card">
+          <h3 style="color:var(--verde)">📉 Top 5 Importaciones Bolivia (2022→2024, Miles USD)</h3>
+          <div class="bar-chart">
+            <div class="bar-row"><span class="bar-lbl">⛽ Combustibles</span><div class="bar-trk"><div class="bar-fill" style="width:100%;background:var(--verde)"></div></div><span class="bar-pct" style="color:var(--verde)">4.409 → 2.890</span></div>
+            <div class="bar-row"><span class="bar-lbl">⚙️ Maquinaria</span><div class="bar-trk"><div class="bar-fill" style="width:82%;background:var(--verde)"></div></div><span class="bar-pct" style="color:var(--verde)">1.359 → 1.185</span></div>
+            <div class="bar-row"><span class="bar-lbl">🚗 Vehículos</span><div class="bar-trk"><div class="bar-fill" style="width:65%;background:var(--verde)"></div></div><span class="bar-pct" style="color:var(--verde)">1.080 → 777</span></div>
+            <div class="bar-row"><span class="bar-lbl">📱 Mat. Eléctrico</span><div class="bar-trk"><div class="bar-fill" style="width:50%;background:var(--verde)"></div></div><span class="bar-pct" style="color:var(--verde)">655 → 514</span></div>
+            <div class="bar-row"><span class="bar-lbl">🧴 Plásticos</span><div class="bar-trk"><div class="bar-fill" style="width:45%;background:var(--verde)"></div></div><span class="bar-pct" style="color:var(--verde)">633 → 509</span></div>
+          </div>
+          <p style="font-size:.75rem;color:#aaa;margin-top:.8rem">Fuente: International Trade Centre (ITC), 2026. Total país: 13.049 → 9.904 (−24%)</p>
+        </div>
+        <div class="cm-card" style="margin-top:1.3rem">
+          <h3 style="color:var(--verde)">📊 Indicadores Comerciales 2024</h3>
+          <div class="kpi-grid">
+            <div class="kpi" style="background:var(--verde)"><div class="kv">$9.9B</div><div class="kl">Importaciones totales 2024</div></div>
+            <div class="kpi" style="background:var(--verde)"><div class="kv">−14.2%</div><div class="kl">Caída importaciones (crisis divisas)</div></div>
+            <div class="kpi" style="background:var(--verde)"><div class="kv">China 19–21%</div><div class="kl">Principal proveedor · Brasil 16%</div></div>
+            <div class="kpi" style="background:var(--verde)"><div class="kv">+8.5%</div><div class="kl">Crecimiento exportaciones est. 2025</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cm-card">
+          <h3 style="color:var(--verde)">⭐ Productos Estrella de Exportación</h3>
+          <div class="star-list">
+            <div class="star-item" style="background:var(--verde-l)">
+              <div class="si-ic">🔩</div>
+              <div class="si-info">
+                <div class="si-nm">Zinc (concentrados mineros)</div>
+                <div class="si-dt">Asia 64.9%: Japón 28% · China 22% · Corea del Sur 15%<br>Europa 24.1%: Bélgica 12% · España 8% · Oceanía 11%</div>
+              </div>
+              <div class="si-val" style="color:var(--verde)">#1 Export.</div>
+            </div>
+            <div class="star-item" style="background:var(--verde-l)">
+              <div class="si-ic">🥇</div>
+              <div class="si-info">
+                <div class="si-nm">Oro bruto (uso no monetario)</div>
+                <div class="si-dt">India 51.6% ($364M) · EAU 42.3% ($298M)<br>Turquía 2.9% · Hong Kong 2.4% · Canadá 0.7%</div>
+              </div>
+              <div class="si-val" style="color:var(--verde)">22% exp.</div>
+            </div>
+            <div class="star-item" style="background:var(--verde-l)">
+              <div class="si-ic">💍</div>
+              <div class="si-info">
+                <div class="si-nm">Joyería de oro (técnica filigrana)</div>
+                <div class="si-dt">EAU concentra 95% de compras · Mercado de lujo de Dubái<br>Récord histórico 2025: más de $200 millones exportados</div>
+              </div>
+              <div class="si-val" style="color:var(--verde)">Récord '25</div>
+            </div>
+            <div class="star-item" style="background:var(--verde-l)">
+              <div class="si-ic">🦙</div>
+              <div class="si-info">
+                <div class="si-nm">Prendas fibra de alpaca ("lujo sostenible")</div>
+                <div class="si-dt">EE.UU 36% · Italia 26% · Alemania 23% · Francia 15%<br>Crecimiento proyectado: +6% anual hacia finales de 2026</div>
+              </div>
+              <div class="si-val" style="color:var(--verde)">+6%/año</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dl-bar" style="background:var(--verde)">
+      <div class="dl-info">
+        <h3>📗 Fascículo #1 — Bolivia</h3>
+        <p>Guía Rápida de Maravillas Bolivianas · Colección Prometeus · Politécnico Internacional 2025–2026</p>
+      </div>
+      <a class="dl-btn" style="color:var(--verde)" href="Proyecto_Prometeus_Volumen_1.pdf" download="Prometeus_Fasciculo1_Bolivia.pdf">⬇ Descargar PDF</a>
+    </div>
+  </div>
+
+</div>
+</div><!-- /bolivia -->
+
+<div class="sdiv" style="background:var(--azul)"></div>
+
+<!-- ═══════════════ ECUADOR ═══════════════ -->
+<div id="ecuador">
+<div class="cs-header" style="background:var(--azul)">
+  <div class="cs-deco">ECU</div>
+  <div class="cs-inner">
+    <p class="cs-ey">Fascículo #2 · Identidad Azul · La Mitad del Mundo</p>
+    <h2 class="cs-h">🇪🇨 República del Ecuador</h2>
+    <p class="cs-sub" style="color:rgba(255,255,255,.6)">Galápagos · Amazonía · Cacao · Camarón · Petróleo</p>
+    <div class="cs-ficha">
+      <div class="fi"><div class="fv">17.87M</div><div class="fl">Habitantes (INEC 2022)</div></div>
+      <div class="fi"><div class="fv">Quito</div><div class="fl">Capital · 2.850 m s.n.m.</div></div>
+      <div class="fi"><div class="fv">$130.53B</div><div class="fl">PIB (USD, 2025)</div></div>
+      <div class="fi"><div class="fv">$7.210</div><div class="fl">PIB per cápita USD</div></div>
+      <div class="fi"><div class="fv">1.24%</div><div class="fl">Inflación</div></div>
+      <div class="fi"><div class="fv">B–</div><div class="fl">Riesgo de no pago</div></div>
+    </div>
+  </div>
+</div>
+<div class="cs-tabs">
+  <button class="cs-tab active" style="color:var(--azul);border-bottom-color:var(--azul)" onclick="tab('ec','t',this,event)">🗺️ Turismo</button>
+  <button class="cs-tab" onclick="tab('ec','g',this,event)">🍽️ Gastronomía</button>
+  <button class="cs-tab" onclick="tab('ec','c',this,event)">📦 Comercio Exterior</button>
+</div>
+<div class="cs-body">
+
+  <!-- ── TAB: TURISMO ── -->
+  <div id="ec-t" class="cs-panel active">
+    <div class="t-grid reveal">
+
+      <div class="tc">
+        <div class="tc-top" style="background:var(--azul)"><span class="tc-em">🌍</span><div class="tc-nm">La Mitad del Mundo</div></div>
+        <div class="tc-body">
+          <p class="tc-desc">Complejo monumental en San Antonio de Pichincha, a <strong>26 km al norte de Quito</strong>. Su origen se remonta a 1736 cuando la Misión Geodésica Francesa determinó la línea ecuatorial. El monumento actual (1982) es una torre de piedra de <strong>30 metros</strong> coronada por un globo de latón. Cuenta con museos, experimentos de física interactiva y pabellones que celebran la historia científica y cultural del país.</p>
+          <div class="tc-fact" style="background:var(--azul-l);color:var(--azul)">📍 San Antonio de Pichincha · 26 km norte de Quito · Tours: Quito Tour Bus, Civitatis, Viator</div>
+        </div>
+      </div>
+
+      <div class="tc">
+        <div class="tc-top" style="background:var(--azul)"><span class="tc-em">⛪</span><div class="tc-nm">Basílica del Voto Nacional</div></div>
+        <div class="tc-body">
+          <p class="tc-desc">La obra arquitectónica neogótica más grande de toda América. Su construcción comenzó en <strong>1892</strong> por decreto del presidente Caamaño, financiada por donaciones ciudadanas. Destaca mundialmente por sustituir las clásicas gárgolas europeas por <strong>fauna endémica ecuatoriana</strong>: cóndores, caimanes, armadillos y tortugas de Galápagos. Sus miradores ofrecen vistas únicas de Quito.</p>
+          <div class="tc-fact" style="background:var(--azul-l);color:var(--azul)">📍 Calles Venezuela y Carchi · Centro Histórico de Quito · Tours: Civitatis, guías del Centro Histórico</div>
+        </div>
+      </div>
+
+      <div class="tc">
+        <div class="tc-top" style="background:var(--azul)"><span class="tc-em">🐢</span><div class="tc-nm">Playa Tortuga Bay · Galápagos</div></div>
+        <div class="tc-body">
+          <p class="tc-desc">Joya ecológica de la Isla Santa Cruz, declarada sitio de anidación de la <strong>tortuga marina verde</strong>. Conservada en estado prístino por el Parque Nacional Galápagos, fue refugio de barcos balleneros en los siglos XVIII y XIX. Tiene dos sectores: <em>Playa Brava</em> (surf) y <em>Playa Mansa</em>, bahía tranquila con iguanas marinas, rayas y tiburones tintoreras.</p>
+          <div class="tc-fact" style="background:var(--azul-l);color:var(--azul)">📍 Costa suroeste Isla Santa Cruz · 2.5 km desde Puerto Ayora · Operador: Galapatours</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── TAB: GASTRONOMÍA ── -->
+  <div id="ec-g" class="cs-panel">
+    <div class="g-grid reveal">
+
+      <div class="pc" style="border-left:5px solid var(--azul)">
+        <div class="pc-h"><div class="pc-em">🍲</div><div><div class="pc-nm" style="color:var(--azul)">Encebollado</div><div class="pc-or">Costa ecuatoriana · Plato insignia nacional</div></div></div>
+        <p class="pc-desc">El "caldo curativo" que une al país. Nacido en los puertos del Pacífico en la época precolombina, transformado con la llegada española que aportó la cebolla morada, el limón y los condimentos andinos. Desde desayuno de estibadores del puerto de Guayaquil hasta remedio infalible contra el "chuchaqui" (resaca). Se consume en esquinas, mercados y restaurantes elegantes por igual.</p>
+        <div class="pc-ing" style="background:var(--azul-l)"><h4 style="color:var(--azul)">Ingredientes principales</h4><p>1 lb atún/albacora · 1 lb yuca · 2 cebollas moradas · 2 tomates · ají para seco · ajo · cilantro · 3 limones · comino · 2 litros agua</p></div>
+      </div>
+
+      <div class="pc" style="border-left:5px solid var(--azul)">
+        <div class="pc-h"><div class="pc-em">🥣</div><div><div class="pc-nm" style="color:var(--azul)">Locro de Papa</div><div class="pc-or">Sierra ecuatoriana · Herencia prehispánica</div></div></div>
+        <p class="pc-desc">Sopa espesa y reconfortante del corazón andino. Su nombre viene del quichua <em>rucru</em> (guiso denso). Herencia directa de las cocinas prehispánicas enriquecida con los lácteos que trajeron los españoles. El secreto es la <strong>papa chola</strong>, variedad local que se deshace y suelta sus almidones creando una textura aterciopelada. Símbolo de la hospitalidad serrana.</p>
+        <div class="pc-ing" style="background:var(--azul-l)"><h4 style="color:var(--azul)">Ingredientes principales</h4><p>2 lb papa chola · cebolla blanca · ajo · 1 taza leche entera · 1 taza queso fresco · aceite de achiote · comino · aguacate · cilantro · 1.5 litros agua</p></div>
+      </div>
+
+      <div class="pc" style="border-left:5px solid var(--azul)">
+        <div class="pc-h"><div class="pc-em">🦐</div><div><div class="pc-nm" style="color:var(--azul)">Ceviche de Camarón</div><div class="pc-or">Costa ecuatoriana · Ritual de fin de semana</div></div></div>
+        <p class="pc-desc">Diferente al estilo peruano: el camarón ecuatoriano va <strong>completamente cocido</strong> y sumergido en una sopa fría cargada de sabor. El toque maestro es el <strong>jugo de naranja</strong> que equilibra la acidez del limón. Ecuador, uno de los mayores productores de camarón del mundo, convirtió este plato en un ritual costero para locales y turistas.</p>
+        <div class="pc-ing" style="background:var(--azul-l)"><h4 style="color:var(--azul)">Ingredientes principales</h4><p>1 lb camarones · 2 cebollas moradas · 2 tomates · jugo 4 limones · jugo 2 naranjas · cilantro · aceite girasol · mostaza · 1 litro agua para cocción</p></div>
+      </div>
+
+      <div class="pc" style="border-left:5px solid var(--azul)">
+        <div class="pc-h"><div class="pc-em">🌿</div><div><div class="pc-nm" style="color:var(--azul)">Maito de Pescado</div><div class="pc-or">Amazonía ecuatoriana · Técnica milenaria Kichwa–Shuar</div></div></div>
+        <p class="pc-desc">La preparación más sagrada de las nacionalidades indígenas amazónicas. <em>Maito</em> en quichua significa "envuelto". El pescado fresco se envuelve en hojas de <strong>bijao</strong> y se cocina sobre brasas, sin ollas ni condimentos modernos, solo sal marina. Un acto de respeto hacia los recursos de la selva, transmitido de generación en generación.</p>
+        <div class="pc-ing" style="background:var(--azul-l)"><h4 style="color:var(--azul)">Ingredientes principales</h4><p>4 pescados enteros (tilapia/bagre) · 12 hojas de bijao · sal marina gruesa · fibra vegetal para amarrar · yucas cocidas para acompañar</p></div>
+      </div>
+
+      <div class="pc" style="border-left:5px solid var(--azul)">
+        <div class="pc-h"><div class="pc-em">🍷</div><div><div class="pc-nm" style="color:var(--azul)">Pájaro Azul</div><div class="pc-or">Provincia de Bolívar · Licor artesanal de luto y celebración</div></div></div>
+        <p class="pc-desc">El destilado artesanal más emblemático de los Andes ecuatorianos, elaborado desde el jugo de caña de azúcar macerado con hierbas aromáticas, cáscaras de cítricos y especias que le dan un tono azulado. Indispensable en los velorios de la Sierra alta, donde el frío del páramo une a los dolientes. Símbolo de comunidad, perdón y respeto.</p>
+        <div class="pc-ing" style="background:var(--azul-l)"><h4 style="color:var(--azul)">Ingredientes principales</h4><p>750 ml aguardiente de caña · cáscara naranja y mandarina · 2 estrellas de anís · canela en rama · esencia de vainilla · almíbar simple (azúcar + agua)</p></div>
+      </div>
+
+      <div class="pc" style="border-left:5px solid var(--azul)">
+        <div class="pc-h"><div class="pc-em">🍞</div><div><div class="pc-nm" style="color:var(--azul)">Colada Morada y Guaguas de Pan</div><div class="pc-or">Todo el país · Día de los Difuntos · 2 de noviembre</div></div></div>
+        <p class="pc-desc">La máxima expresión del sincretismo religioso ecuatoriano. En la época prehispánica se celebraba el <em>Aya Marcay Quilla</em> con una bebida de maíz negro. Los colonizadores transformaron el ritual: la sangre fue reemplazada por moras y mortiños (la <strong>Colada Morada</strong>), y las figuras de barro por panes en forma de bebé (las <strong>Guaguas</strong>). Las familias comen en los cementerios sobre las lápidas.</p>
+        <div class="pc-ing" style="background:var(--azul-l)"><h4 style="color:var(--azul)">Ingredientes principales (Colada)</h4><p>Harina de maíz negro · mortiños · moras · frutillas · piña · panela · hierbas aromáticas (naranja, hierbaluisa, arrayán) · canela · clavos · ishpingos</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── TAB: COMERCIO EXTERIOR ── -->
+  <div id="ec-c" class="cs-panel">
+    <div class="cm-layout reveal">
+      <div>
+        <div class="cm-card">
+          <h3 style="color:var(--azul)">📥 Top 5 Importaciones 2025</h3>
+          <div class="bar-chart">
+            <div class="bar-row"><span class="bar-lbl">⛽ Combustibles</span><div class="bar-trk"><div class="bar-fill" style="width:100%;background:var(--azul)"></div></div><span class="bar-pct" style="color:var(--azul)">$7.036B</span></div>
+            <div class="bar-row"><span class="bar-lbl">⚙️ Maquinaria</span><div class="bar-trk"><div class="bar-fill" style="width:50%;background:var(--azul)"></div></div><span class="bar-pct" style="color:var(--azul)">$3.518B</span></div>
+            <div class="bar-row"><span class="bar-lbl">🚗 Vehículos</span><div class="bar-trk"><div class="bar-fill" style="width:38%;background:var(--azul)"></div></div><span class="bar-pct" style="color:var(--azul)">$2.641B</span></div>
+            <div class="bar-row"><span class="bar-lbl">📱 Mat. Eléctrico</span><div class="bar-trk"><div class="bar-fill" style="width:35%;background:var(--azul)"></div></div><span class="bar-pct" style="color:var(--azul)">$2.488B</span></div>
+            <div class="bar-row"><span class="bar-lbl">🐾 Alim. Animales</span><div class="bar-trk"><div class="bar-fill" style="width:20%;background:var(--azul)"></div></div><span class="bar-pct" style="color:var(--azul)">$1.440B</span></div>
+          </div>
+          <p style="font-size:.75rem;color:#aaa;margin-top:.8rem">Fuente: ITC, 2026. Total importaciones 2025: $32.648B (+10.71%). Principal proveedor: EE.UU. 28.06% · China 25.85%</p>
+        </div>
+        <div class="cm-card" style="margin-top:1.3rem">
+          <h3 style="color:var(--azul)">📊 Indicadores Comerciales 2025</h3>
+          <div class="kpi-grid">
+            <div class="kpi" style="background:var(--azul)"><div class="kv">$32.6B</div><div class="kl">Importaciones totales 2025</div></div>
+            <div class="kpi" style="background:var(--azul)"><div class="kv">+10.71%</div><div class="kl">Crecimiento importaciones</div></div>
+            <div class="kpi" style="background:var(--azul)"><div class="kv">$37.2B</div><div class="kl">Exportaciones totales 2025</div></div>
+            <div class="kpi" style="background:var(--azul)"><div class="kv">+7.94%</div><div class="kl">Crecimiento exportaciones</div></div>
+          </div>
+        </div>
+        <div class="cm-card" style="margin-top:1.3rem">
+          <h3 style="color:var(--azul)">🤝 Acuerdo EE.UU.–Ecuador 2026</h3>
+          <div class="star-list">
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">📜</div>
+              <div class="si-info">
+                <div class="si-nm">Acuerdo Recíproco de Comercio</div>
+                <div class="si-dt">Firmado en 2026 tras negociaciones desde mayo 2025. Reduce aranceles bilaterales y elimina barreras no arancelarias.</div>
+              </div>
+            </div>
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">📦</div>
+              <div class="si-info">
+                <div class="si-nm">50% exportaciones sin arancel</div>
+                <div class="si-dt">La mitad de las ventas no petroleras ecuatorianas ingresarán al mercado estadounidense sin pagar aranceles.</div>
+              </div>
+            </div>
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">📈</div>
+              <div class="si-info">
+                <div class="si-nm">+15% crecimiento anual proyectado</div>
+                <div class="si-dt">Proyección oficial: 15% de incremento anual en exportaciones hacia EE.UU. de aquí al año 2030.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cm-card">
+          <h3 style="color:var(--azul)">⭐ Productos Estrella de Exportación 2025</h3>
+          <div class="star-list">
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">🦐</div>
+              <div class="si-info">
+                <div class="si-nm">Camarón y Mariscos (HS 03)</div>
+                <div class="si-dt">China 39% · EE.UU. 25.5% · Europa 15.3% (España, Italia, Francia)<br>Récord histórico: más de $8.806B exportados en 2025</div>
+              </div>
+              <div class="si-val" style="color:var(--azul)">#1 Export.</div>
+            </div>
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">🛢️</div>
+              <div class="si-info">
+                <div class="si-nm">Petróleo Crudo y Derivados (HS 27)</div>
+                <div class="si-dt">Panamá (hub logístico) 81.3% · Perú 6% · Chile 3.6% · EE.UU. 3.4%<br>$7.752B en 2025 (contracción vs. $9.57B en 2024)</div>
+              </div>
+              <div class="si-val" style="color:var(--azul)">#2 Export.</div>
+            </div>
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">🍌</div>
+              <div class="si-info">
+                <div class="si-nm">Frutas — Banano (HS 08)</div>
+                <div class="si-dt">EE.UU. 21.7% · Rusia 16.7% · UE 15% · Resto 46.6%<br>$4.818B en 2025, crecimiento sostenido frente a $4.267B en 2024</div>
+              </div>
+              <div class="si-val" style="color:var(--azul)">#3 Export.</div>
+            </div>
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">🍫</div>
+              <div class="si-info">
+                <div class="si-nm">Cacao Fino de Aroma (HS 18)</div>
+                <div class="si-dt">Norteamérica 29.8% · Asia/Oceanía 25.2% · UE 24.7% · Resto 20.3%<br>$4.666B en 2025 — casi 5× los $940M de 2021. Líder global de cacao fino.</div>
+              </div>
+              <div class="si-val" style="color:var(--azul)">Récord '25</div>
+            </div>
+            <div class="star-item" style="background:var(--azul-l)">
+              <div class="si-ic">⛏️</div>
+              <div class="si-info">
+                <div class="si-nm">Minería — Cobre y Oro</div>
+                <div class="si-dt">Megaproyectos amazónicos con capital extranjero. Aporta ~3% del PIB.<br>$4.160B exportados · Crecimiento interanual del +35.4%</div>
+              </div>
+              <div class="si-val" style="color:var(--azul)">+35.4%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cm-card" style="margin-top:1.3rem;border-left:4px solid #E65100">
+          <h3 style="color:#E65100">⚠️ Crisis CAN: Ecuador–Colombia (2026)</h3>
+          <p style="font-size:.82rem;color:#555;line-height:1.7;margin-bottom:.8rem">Entre enero y mayo de 2026, Ecuador y Colombia protagonizaron una de las mayores crisis comerciales de la integración andina. Ecuador impuso una "Tasa de Seguridad" sobre productos colombianos; Colombia respondió con la "Ley del Espejo" y suspendió parcialmente la interconexión eléctrica. La escalada llegó a aranceles del 100% (EC) y 75% (CO).</p>
+          <div class="star-list">
+            <div class="star-item" style="background:#FFF3E0">
+              <div class="si-ic">📋</div>
+              <div class="si-info">
+                <div class="si-nm">Resoluciones CAN 2581, 2582, 2583 — 7 mayo 2026</div>
+                <div class="si-dt">La Secretaría General ordenó a ambos países desmontar todas las medidas restrictivas en un plazo de 10 días calendario. Incumplirlas implicaría acudir al Tribunal de Justicia de la CAN (TJCA).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dl-bar" style="background:var(--azul)">
+      <div class="dl-info">
+        <h3>📘 Fascículo #2 — Ecuador</h3>
+        <p>Mitad del Mundo · Comercio, Cultura y Gastronomía · Colección Prometeus · Politécnico Internacional 2025–2026</p>
+      </div>
+      <a class="dl-btn" style="color:var(--azul)" href="Proyecto_Prometeus_Volumen_2.pdf" download="Prometeus_Fasciculo2_Ecuador.pdf">⬇ Descargar PDF</a>
+    </div>
+  </div>
+
+</div>
+</div><!-- /ecuador -->
+
+<div class="sdiv" style="background:var(--rojo)"></div>
+
+<!-- ═══════════════ PERÚ ═══════════════ -->
+<div id="peru">
+<div class="cs-header" style="background:var(--rojo)">
+  <div class="cs-deco">PER</div>
+  <div class="cs-inner">
+    <p class="cs-ey">Fascículo #3 · Identidad Roja · Próximamente</p>
+    <h2 class="cs-h">🇵🇪 República del Perú</h2>
+    <p class="cs-sub" style="color:rgba(255,255,255,.6)">Inca · Machu Picchu · Gastronomía Mundial · Cobre · Quinua</p>
+    <div class="cs-ficha">
+      <div class="fi"><div class="fv">33M+</div><div class="fl">Habitantes</div></div>
+      <div class="fi"><div class="fv">Lima</div><div class="fl">Capital · Ciudad de los Reyes</div></div>
+      <div class="fi"><div class="fv">Sol</div><div class="fl">Moneda</div></div>
+      <div class="fi"><div class="fv">CAN</div><div class="fl">Miembro fundador 1969</div></div>
+    </div>
+  </div>
+</div>
+<div class="cs-tabs">
+  <button class="cs-tab active" style="color:var(--rojo);border-bottom-color:var(--rojo)">🔜 En Desarrollo</button>
+</div>
+<div class="cs-body">
+  <div class="reveal" style="text-align:center;padding:5rem 2rem">
+    <div style="font-size:5rem;margin-bottom:1.5rem">🔜</div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--rojo);margin-bottom:.8rem">Fascículo en Desarrollo</h3>
+    <p style="color:#777;max-width:440px;margin:0 auto;line-height:1.8;font-size:1rem">El contenido completo de este país — turismo, gastronomía y comercio exterior — estará disponible en el próximo fascículo de la Colección Prometeus.</p>
+  </div>
+</div>
+</div>
+
+<div class="sdiv" style="background:var(--amarillo)"></div>
+
+<!-- ═══════════════ COLOMBIA ═══════════════ -->
+<div id="colombia">
+<div class="cs-header" style="background:var(--amarillo)">
+  <div class="cs-deco" style="color:rgba(0,0,0,.1)">COL</div>
+  <div class="cs-inner">
+    <p class="cs-ey" style="color:rgba(0,0,0,.4)">Fascículo #4 · Identidad Amarilla · Próximamente</p>
+    <h2 class="cs-h" style="color:var(--carbon)">🇨🇴 República de Colombia</h2>
+    <p class="cs-sub" style="color:rgba(0,0,0,.45)">Café · Flores · Minería · Biodiversidad · Nuestro hogar</p>
+    <div class="cs-ficha" style="background:rgba(0,0,0,.12)">
+      <div class="fi"><div class="fv" style="color:var(--carbon)">52M+</div><div class="fl" style="color:rgba(0,0,0,.45)">Habitantes</div></div>
+      <div class="fi"><div class="fv" style="color:var(--carbon)">Bogotá</div><div class="fl" style="color:rgba(0,0,0,.45)">Capital · 2.600 m s.n.m.</div></div>
+      <div class="fi"><div class="fv" style="color:var(--carbon)">Peso</div><div class="fl" style="color:rgba(0,0,0,.45)">Moneda</div></div>
+      <div class="fi"><div class="fv" style="color:var(--carbon)">CAN</div><div class="fl" style="color:rgba(0,0,0,.45)">Miembro fundador 1969</div></div>
+    </div>
+  </div>
+</div>
+<div class="cs-tabs">
+  <button class="cs-tab active" style="color:#B8860B;border-bottom-color:#B8860B">🔜 En Desarrollo</button>
+</div>
+<div class="cs-body">
+  <div class="reveal" style="text-align:center;padding:5rem 2rem">
+    <div style="font-size:5rem;margin-bottom:1.5rem">🔜</div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--amarillo);margin-bottom:.8rem">Fascículo en Desarrollo</h3>
+    <p style="color:#777;max-width:440px;margin:0 auto;line-height:1.8;font-size:1rem">El contenido completo de Colombia — turismo, gastronomía y comercio exterior — estará disponible en el próximo fascículo de la Colección Prometeus.</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ IDENTIDAD LATINA ═══════════════ -->
+<section id="latina" class="latina">
+  <div class="lat-in">
+    <p style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:#444;margin-bottom:.5rem">Sección Final · Fusión CAN</p>
+    <h2 class="lat-h">Identidad Latina · Somos CAN</h2>
+    <p class="lat-sub">Cuatro naciones. Una misma raíz andina. Remarcamos nuestras diferencias para lucir nuestras semejanzas.</p>
+    <div class="lat-grid reveal">
+      <div class="lc">
+        <div class="lc-top" style="background:linear-gradient(135deg,#2E7D32,#1B5E20)">
+          <div class="lc-fl">🇧🇴</div><div class="lc-p">Bolivia</div>
+          <span class="lc-tag">Fascículo #1 · ✅ Disponible</span>
+        </div>
+        <div class="lc-body"><p>Zinc, oro y litio. El Salar más grande del mundo. 36 naciones indígenas vivas. La crisis que enseña más que el éxito.</p></div>
+      </div>
+      <div class="lc">
+        <div class="lc-top" style="background:linear-gradient(135deg,#1565C0,#0D47A1)">
+          <div class="lc-fl">🇪🇨</div><div class="lc-p">Ecuador</div>
+          <span class="lc-tag">Fascículo #2 · ✅ Disponible</span>
+        </div>
+        <div class="lc-body"><p>Camarón récord, cacao fino de aroma y las Galápagos como tesoro natural. La Mitad del Mundo con exportaciones que alcanzan $37B en 2025.</p></div>
+      </div>
+      <div class="lc">
+        <div class="lc-top" style="background:linear-gradient(135deg,#C62828,#B71C1C)">
+          <div class="lc-fl">🇵🇪</div><div class="lc-p">Perú</div>
+          <span class="lc-tag">Fascículo #3 · 🔜 En desarrollo</span>
+        </div>
+        <div class="lc-body"><p>Cuna del Imperio Inca, Machu Picchu y la gastronomía más premiada de América Latina. Cobre, espárragos y quinua al mundo.</p></div>
+        <div class="lc-cm">Próximamente</div>
+      </div>
+      <div class="lc">
+        <div class="lc-top" style="background:linear-gradient(135deg,#E65100,#BF360C)">
+          <div class="lc-fl">🇨🇴</div><div class="lc-p">Colombia</div>
+          <span class="lc-tag">Fascículo #4 · 🔜 En desarrollo</span>
+        </div>
+        <div class="lc-body"><p>El mejor café del mundo, las flores más frescas de Europa y el país que transforma su historia en potencia turística y cultural.</p></div>
+        <div class="lc-cm">Próximamente</div>
+      </div>
+    </div>
+    <div class="lat-quote">
+      <p>"La construcción de diálogos y acuerdos con países hermanos son un sinónimo de avance del renacer cultural. <strong style="color:#FFA726">Remarcamos nuestras diferencias para lucir nuestras semejanzas.</strong>"</p>
+      <p style="color:#444;margin-top:.7rem;font-size:.75rem">— Proyecto Prometeus · Politécnico Internacional · 2025–2026</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-stripe"></div>
+  <p>⚡ <strong>Colección Prometeus</strong> · Comunidad Andina · Politécnico Internacional · 2025–2026</p>
+  <p style="margin-top:.35rem;font-size:.7rem">Bolivia · Ecuador · Perú · Colombia · Fascículos de Comercio Exterior, Cultura y Turismo</p>
+</footer>
+
+<script>
+function tab(country, panel, btn, e) {
+  document.querySelectorAll('[id^="'+country+'-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById(country+'-'+panel).classList.add('active');
+  btn.closest('.cs-tabs').querySelectorAll('.cs-tab').forEach(b => {
+    b.classList.remove('active');
+    b.style.color = '#aaa';
+    b.style.borderBottomColor = 'transparent';
+  });
+  btn.classList.add('active');
+  const colors = {bo:'#2E7D32',ec:'#1565C0',pe:'#C62828',co:'#E65100'};
+  btn.style.color = colors[country] || '#333';
+  btn.style.borderBottomColor = colors[country] || '#333';
+}
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold:.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
